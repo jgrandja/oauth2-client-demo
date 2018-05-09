@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-cargo-plugin:2.3'
+    }
+}
+
+apply plugin: 'com.bmuschko.cargo'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    tomcatHomeDir = '/Users/jgrandja/DevTools/apache-tomcat-8.0.33'
+}
+
+cargo {
+    containerId = 'tomcat8x'
+    port = 8090
+
+    deployable {
+        file = file('cloudfoundry-identity-uaa-3.16.0.war')
+        context = 'uaa'
+    }
+
+    local {
+        homeDir = file("$tomcatHomeDir")
+        outputFile = file('uaa-server.log')
+
+        systemProperties {
+            property "UAA_CONFIG_PATH", "$projectDir"
+        }
+    }
+}
