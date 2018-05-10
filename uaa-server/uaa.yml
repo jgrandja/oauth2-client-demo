@@ -15,10 +15,16 @@ oauth:
       scope: openid,profile,email
       authorities: uaa.resource
       redirect-uri: http://localhost:8080/login/oauth2/code/uaa
+    messaging:
+      secret: secret
+      authorized-grant-types: authorization_code
+      scope: message.read,message.write
+      authorities: uaa.resource
+      redirect-uri: http://localhost:8080/messages
 
 scim:
   users:
-    - springsec5|password|springsec5@pivotal.io|Spring|Security5|uaa.user,profile,email
+    - springsec5|password|springsec5@pivotal.io|Spring|Security5|uaa.user,profile,email,message.read,message.write
 
 jwt:
   token:

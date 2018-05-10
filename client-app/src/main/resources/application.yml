@@ -22,7 +22,16 @@ spring:
             authorization-grant-type: authorization_code
             redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope: openid, profile, email
-            client-name: UAA
+            client-name: UAA Login
+          messaging:
+            provider: uaa
+            client-id: messaging
+            client-secret: secret
+            client-authentication-method: basic
+            authorization-grant-type: authorization_code
+            redirect-uri-template: "{baseUrl}/messages"
+            scope: message.read
+            client-name: Messaging Client
         provider:
           uaa:
             authorization-uri: http://localhost:8090/uaa/oauth/authorize
@@ -30,3 +39,7 @@ spring:
             user-info-uri: http://localhost:8090/uaa/userinfo
             user-name-attribute: sub
             jwk-set-uri: http://localhost:8090/uaa/token_keys
+
+oauth2:
+  resource:
+    messages-uri: http://localhost:8092/messages

@@ -29,6 +29,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web",
             "org.springframework.boot:spring-boot-starter-thymeleaf",
             "org.springframework.boot:spring-boot-starter-security",
+            "org.springframework.security:spring-security-config:${springSecurityOAuth2Version}",
             "org.springframework.security:spring-security-oauth2-core:${springSecurityOAuth2Version}",
             "org.springframework.security:spring-security-oauth2-client:${springSecurityOAuth2Version}",
             "org.springframework.security:spring-security-oauth2-jose:${springSecurityOAuth2Version}",

@@ -29,7 +29,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-	private static final String RESOURCE_ID = "messages-resource";
+	private static final String RESOURCE_ID = "messaging";
 
 	@Autowired
 	private TokenStore tokenStore;
