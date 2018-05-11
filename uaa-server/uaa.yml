@@ -21,6 +21,10 @@ oauth:
       scope: message.read,message.write
       authorities: uaa.resource
       redirect-uri: http://localhost:8080/messages
+    general-messaging:
+      secret: secret
+      authorized-grant-types: client_credentials
+      authorities: message.read
 
 scim:
   users:

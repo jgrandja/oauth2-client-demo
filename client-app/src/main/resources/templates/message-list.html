@@ -8,8 +8,17 @@
 <div th:substituteby="index::logout"></div>
 <h1>Messages</h1>
 <div>
+	<span style="font-weight:bold">User Messages:</span>
 	<ul>
 		<li th:each="message : ${messages}">
+			<span th:text="${message}"></span>
+		</li>
+	</ul>
+</div>
+<div>
+	<span style="font-weight:bold">General Messages:</span>
+	<ul>
+		<li th:each="message : ${generalMessages}">
 			<span th:text="${message}"></span>
 		</li>
 	</ul>
