@@ -1,5 +1,10 @@
 = OAuth 2.0 Client Sample
 
+== Initial Setup
+
+. Set the `ext.tomcatHomeDir` in `uaa-server/build.gradle` to the local distribution of Tomcat 8.x
+. Download UAA -> `./gradlew downloadUAA`
+
 == Run the Sample
 
 . Build the sample -> `./gradlew clean build`

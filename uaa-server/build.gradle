@@ -14,7 +14,27 @@ repositories {
 }
 
 ext {
+    uaaVersion = '4.11.0'
     tomcatHomeDir = '/Users/jgrandja/DevTools/apache-tomcat-8.0.33'
+}
+
+configurations {
+    uaa
+}
+
+dependencies {
+    uaa("org.cloudfoundry.identity:cloudfoundry-identity-uaa:${uaaVersion}@war") {
+        artifact {
+            name = "cloudfoundry-identity-uaa"
+            extension = 'war'
+            type = 'war'
+        }
+    }
+}
+
+task downloadUAA(type: Copy) {
+    from configurations.uaa
+    into "$projectDir"
 }
 
 cargo {
@@ -22,7 +42,7 @@ cargo {
     port = 8090
 
     deployable {
-        file = file('cloudfoundry-identity-uaa-3.16.0.war')
+        file = file("cloudfoundry-identity-uaa-${uaaVersion}.war")
         context = 'uaa'
     }
 
