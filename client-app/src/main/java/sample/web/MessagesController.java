@@ -23,7 +23,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.annotation.OAuth2Client;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.web.http.OAuth2ClientAttributeNames;
 import org.springframework.security.oauth2.client.web.http.OAuth2ClientRestTemplateBuilder;
 import org.springframework.stereotype.Controller;
@@ -53,7 +53,7 @@ public class MessagesController {
 	private OAuth2ClientRestTemplateBuilder oauth2ClientRestTemplateBuilder;
 
 	@GetMapping
-	public String getMessages(@OAuth2Client("messaging") OAuth2AuthorizedClient authorizedClient,
+	public String getMessages(@RegisteredOAuth2AuthorizedClient("messaging") OAuth2AuthorizedClient authorizedClient,
 								Authentication authentication, Model model) {
 
 		List messages = WebClient.builder()

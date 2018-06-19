@@ -15,10 +15,9 @@
  */
 package sample.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,26 +37,18 @@ import java.util.Map;
 @Controller
 public class MainController {
 
-	@Autowired
-	private OAuth2AuthorizedClientService authorizedClientService;
-
 	@GetMapping("/")
-	public String index(Model model, OAuth2AuthenticationToken authentication) {
-		OAuth2AuthorizedClient authorizedClient =
-				this.authorizedClientService.loadAuthorizedClient(
-						authentication.getAuthorizedClientRegistrationId(),
-						authentication.getName());
+	public String index(@RegisteredOAuth2AuthorizedClient("uaa") OAuth2AuthorizedClient authorizedClient,
+							OAuth2AuthenticationToken authentication,
+							Model model) {
 		model.addAttribute("userName", authentication.getName());
 		model.addAttribute("clientName", authorizedClient.getClientRegistration().getClientName());
 		return "index";
 	}
 
 	@GetMapping("/userinfo")
-	public String userinfo(Model model, OAuth2AuthenticationToken authentication) {
-		OAuth2AuthorizedClient authorizedClient =
-				this.authorizedClientService.loadAuthorizedClient(
-						authentication.getAuthorizedClientRegistrationId(),
-						authentication.getName());
+	public String userinfo(@RegisteredOAuth2AuthorizedClient("uaa") OAuth2AuthorizedClient authorizedClient,
+							Model model) {
 		Map userAttributes = Collections.emptyMap();
 		String userInfoEndpointUri = authorizedClient.getClientRegistration()
 			.getProviderDetails().getUserInfoEndpoint().getUri();
