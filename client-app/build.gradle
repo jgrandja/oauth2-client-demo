@@ -1,18 +1,14 @@
 buildscript {
     repositories {
-        maven { url 'https://repo.spring.io/libs-milestone' }
+        maven { url 'https://repo.spring.io/plugins-snapshot' }
     }
     dependencies {
+        classpath 'io.spring.gradle:spring-build-conventions:0.0.16.RELEASE'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
     }
 }
 
-group = 'org.springframework.security.samples'
-version = '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: 'io.spring.convention.spring-sample-boot'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -21,8 +17,6 @@ ext.springSecurityOAuth2Version = '5.1.0.BUILD-SNAPSHOT'
 
 repositories {
     maven { url "https://repo.spring.io/libs-snapshot" }
-    maven { url "https://repo.spring.io/libs-milestone" }
-    mavenCentral()
 }
 
 dependencies {
