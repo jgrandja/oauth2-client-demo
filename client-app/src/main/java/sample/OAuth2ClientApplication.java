@@ -27,4 +27,5 @@ public class OAuth2ClientApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OAuth2ClientApplication.class, args);
 	}
+
 }

@@ -34,11 +34,16 @@ import java.util.function.Supplier;
 /**
  * @author Joe Grandja
  */
-class InterceptingClientHttpRequestAttributesFactory extends AbstractClientHttpRequestFactoryWrapper {
+class InterceptingClientHttpRequestAttributesFactory
+		extends AbstractClientHttpRequestFactoryWrapper {
+
 	private final List<? extends ClientHttpRequestInterceptor> interceptors;
+
 	private Supplier<Map<String, Object>> requestAttributes;
 
-	InterceptingClientHttpRequestAttributesFactory(ClientHttpRequestFactory requestFactory, List<? extends ClientHttpRequestInterceptor> interceptors) {
+	InterceptingClientHttpRequestAttributesFactory(
+			ClientHttpRequestFactory requestFactory,
+			List<? extends ClientHttpRequestInterceptor> interceptors) {
 		super(requestFactory);
 		this.interceptors = interceptors;
 	}
@@ -48,27 +53,36 @@ class InterceptingClientHttpRequestAttributesFactory extends AbstractClientHttpR
 	}
 
 	@Override
-	protected ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod, ClientHttpRequestFactory requestFactory) throws IOException {
+	protected ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod,
+			ClientHttpRequestFactory requestFactory) throws IOException {
 		return new DefaultClientHttpRequestAttributes(
 				requestFactory.createRequest(uri, httpMethod),
 				this.requestAttributes.get(),
 				new InterceptingClientHttpRequestExecution(this.interceptors));
 	}
 
-	private class InterceptingClientHttpRequestExecution implements ClientHttpRequestExecution {
+	private class InterceptingClientHttpRequestExecution
+			implements ClientHttpRequestExecution {
+
 		private final Iterator<? extends ClientHttpRequestInterceptor> interceptorsIterator;
 
-		private InterceptingClientHttpRequestExecution(List<? extends ClientHttpRequestInterceptor> interceptors) {
+		private InterceptingClientHttpRequestExecution(
+				List<? extends ClientHttpRequestInterceptor> interceptors) {
 			this.interceptorsIterator = interceptors.iterator();
 		}
 
 		@Override
-		public ClientHttpResponse execute(HttpRequest request, byte[] body) throws IOException {
+		public ClientHttpResponse execute(HttpRequest request, byte[] body)
+				throws IOException {
 			if (this.interceptorsIterator.hasNext()) {
-				ClientHttpRequestInterceptor nextInterceptor = this.interceptorsIterator.next();
+				ClientHttpRequestInterceptor nextInterceptor = this.interceptorsIterator
+						.next();
 				return nextInterceptor.intercept(request, body, this);
 			}
-			return ((DefaultClientHttpRequestAttributes) request).getWrappedRequest().execute();
+			return ((DefaultClientHttpRequestAttributes) request).getWrappedRequest()
+					.execute();
 		}
+
 	}
+
 }

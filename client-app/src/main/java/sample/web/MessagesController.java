@@ -53,16 +53,12 @@ public class MessagesController {
 	private OAuth2ClientRestTemplateBuilder oauth2ClientRestTemplateBuilder;
 
 	@GetMapping
-	public String getMessages(@RegisteredOAuth2AuthorizedClient("messaging") OAuth2AuthorizedClient authorizedClient,
-								Authentication authentication, Model model) {
+	public String getMessages(
+			@RegisteredOAuth2AuthorizedClient("messaging") OAuth2AuthorizedClient authorizedClient,
+			Authentication authentication, Model model) {
 
-		List messages = WebClient.builder()
-				.filter(oauth2Credentials(authorizedClient))
-				.build()
-				.get()
-				.uri(this.messagesUri)
-				.retrieve()
-				.bodyToMono(List.class)
+		List messages = WebClient.builder().filter(oauth2Credentials(authorizedClient))
+				.build().get().uri(this.messagesUri).retrieve().bodyToMono(List.class)
 				.block();
 		model.addAttribute("messages", messages);
 
@@ -76,26 +72,34 @@ public class MessagesController {
 		String clientRegistrationId = "general-messaging";
 
 		RestTemplate restTemplate = this.oauth2ClientRestTemplateBuilder
-				.requestAttribute(OAuth2ClientAttributeNames.CLIENT_REGISTRATION_IDENTIFIER, clientRegistrationId)
-				.requestAttribute(OAuth2ClientAttributeNames.RESOURCE_OWNER_PRINCIPAL, authentication)
+				.requestAttribute(
+						OAuth2ClientAttributeNames.CLIENT_REGISTRATION_IDENTIFIER,
+						clientRegistrationId)
+				.requestAttribute(OAuth2ClientAttributeNames.RESOURCE_OWNER_PRINCIPAL,
+						authentication)
 				.build();
 
-		RequestEntity<Void> request = RequestEntity.get(URI.create(this.messagesUri)).build();
+		RequestEntity<Void> request = RequestEntity.get(URI.create(this.messagesUri))
+				.build();
 
-		ParameterizedTypeReference<List<String>> responseType = new ParameterizedTypeReference<List<String>>() {};
+		ParameterizedTypeReference<List<String>> responseType = new ParameterizedTypeReference<List<String>>() {
+		};
 
-		ResponseEntity<List<String>> response = restTemplate.exchange(request, responseType);
+		ResponseEntity<List<String>> response = restTemplate.exchange(request,
+				responseType);
 
 		return response.getBody();
 	}
 
-	private ExchangeFilterFunction oauth2Credentials(OAuth2AuthorizedClient authorizedClient) {
-		return ExchangeFilterFunction.ofRequestProcessor(
-				clientRequest -> {
-					ClientRequest authorizedRequest = ClientRequest.from(clientRequest)
-							.header(HttpHeaders.AUTHORIZATION, "Bearer " + authorizedClient.getAccessToken().getTokenValue())
-							.build();
-					return Mono.just(authorizedRequest);
-				});
+	private ExchangeFilterFunction oauth2Credentials(
+			OAuth2AuthorizedClient authorizedClient) {
+		return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
+			ClientRequest authorizedRequest = ClientRequest.from(clientRequest)
+					.header(HttpHeaders.AUTHORIZATION,
+							"Bearer " + authorizedClient.getAccessToken().getTokenValue())
+					.build();
+			return Mono.just(authorizedRequest);
+		});
 	}
+
 }

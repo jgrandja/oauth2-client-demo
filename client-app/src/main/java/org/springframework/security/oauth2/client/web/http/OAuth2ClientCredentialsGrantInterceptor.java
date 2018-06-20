@@ -45,10 +45,12 @@ import java.util.stream.Collectors;
 /**
  * @author Joe Grandja
  */
-public class OAuth2ClientCredentialsGrantInterceptor implements ClientHttpRequestInterceptor {
+public class OAuth2ClientCredentialsGrantInterceptor
+		implements ClientHttpRequestInterceptor {
 
 	@Override
-	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+	public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+			ClientHttpRequestExecution execution) throws IOException {
 		DefaultClientHttpRequestAttributes clientHttpRequestAttributes = (DefaultClientHttpRequestAttributes) request;
 
 		String clientRegistrationId = (String) clientHttpRequestAttributes
@@ -58,8 +60,9 @@ public class OAuth2ClientCredentialsGrantInterceptor implements ClientHttpReques
 		OAuth2AuthorizedClientService authorizedClientService = (OAuth2AuthorizedClientService) clientHttpRequestAttributes
 				.getAttribute(OAuth2ClientAttributeNames.AUTHORIZED_CLIENT_SERVICE);
 
-		OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
-				clientRegistrationId, resourceOwnerPrincipal.getName());
+		OAuth2AuthorizedClient authorizedClient = authorizedClientService
+				.loadAuthorizedClient(clientRegistrationId,
+						resourceOwnerPrincipal.getName());
 		if (authorizedClient != null) {
 			return execution.execute(request, body);
 		}
@@ -67,7 +70,8 @@ public class OAuth2ClientCredentialsGrantInterceptor implements ClientHttpReques
 		// Perform client_credentials grant flow
 		ClientRegistrationRepository clientRegistrationRepository = (ClientRegistrationRepository) clientHttpRequestAttributes
 				.getAttribute(OAuth2ClientAttributeNames.CLIENT_REGISTRATION_REPOSITORY);
-		ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(clientRegistrationId);
+		ClientRegistration clientRegistration = clientRegistrationRepository
+				.findByRegistrationId(clientRegistrationId);
 
 		MultiValueMap<String, String> clientCredentialsParams = new LinkedMultiValueMap<>();
 		clientCredentialsParams.add("grant_type", "client_credentials");
@@ -77,17 +81,20 @@ public class OAuth2ClientCredentialsGrantInterceptor implements ClientHttpReques
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.body(clientCredentialsParams);
 
-		RestTemplate restTemplate = new RestTemplateBuilder(rt -> {})
-				.basicAuthorization(clientRegistration.getClientId(), clientRegistration.getClientSecret())
-				.build();
+		RestTemplate restTemplate = new RestTemplateBuilder(rt -> {
+		}).basicAuthorization(clientRegistration.getClientId(),
+				clientRegistration.getClientSecret()).build();
 
 		ResponseEntity<Map<String, String>> tokenResponse = restTemplate.exchange(
-				clientCredentialsRequest, new ParameterizedTypeReference<Map<String, String>>() {});
+				clientCredentialsRequest,
+				new ParameterizedTypeReference<Map<String, String>>() {
+				});
 		Map<String, String> tokenResponseAttributes = tokenResponse.getBody();
 
 		String accessToken = tokenResponseAttributes.get("access_token");
 		OAuth2AccessToken.TokenType accessTokenType = null;
-		if (OAuth2AccessToken.TokenType.BEARER.getValue().equalsIgnoreCase(tokenResponseAttributes.get("token_type"))) {
+		if (OAuth2AccessToken.TokenType.BEARER.getValue()
+				.equalsIgnoreCase(tokenResponseAttributes.get("token_type"))) {
 			accessTokenType = OAuth2AccessToken.TokenType.BEARER;
 		}
 		long expiresIn = 0;
@@ -96,19 +103,20 @@ public class OAuth2ClientCredentialsGrantInterceptor implements ClientHttpReques
 		}
 		Set<String> scopes = null;
 		if (tokenResponseAttributes.containsKey("scope")) {
-			scopes = Arrays.stream(tokenResponseAttributes.get("scope").split(" ")).collect(Collectors.toSet());
+			scopes = Arrays.stream(tokenResponseAttributes.get("scope").split(" "))
+					.collect(Collectors.toSet());
 		}
-		OAuth2AccessTokenResponse accessTokenResponse = OAuth2AccessTokenResponse.withToken(accessToken)
-				.tokenType(accessTokenType)
-				.expiresIn(expiresIn)
-				.scopes(scopes)
-				.build();
+		OAuth2AccessTokenResponse accessTokenResponse = OAuth2AccessTokenResponse
+				.withToken(accessToken).tokenType(accessTokenType).expiresIn(expiresIn)
+				.scopes(scopes).build();
 
 		authorizedClient = new OAuth2AuthorizedClient(clientRegistration,
 				resourceOwnerPrincipal.getName(), accessTokenResponse.getAccessToken());
 
-		authorizedClientService.saveAuthorizedClient(authorizedClient, resourceOwnerPrincipal);
+		authorizedClientService.saveAuthorizedClient(authorizedClient,
+				resourceOwnerPrincipal);
 
 		return execution.execute(request, body);
 	}
+
 }

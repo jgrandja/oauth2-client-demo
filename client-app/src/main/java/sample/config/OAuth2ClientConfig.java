@@ -41,16 +41,14 @@ public class OAuth2ClientConfig {
 	public OAuth2ClientRestTemplateBuilder oauth2ClientRestTemplateBuilder() {
 		OAuth2ClientRestTemplateBuilder builder = new OAuth2ClientRestTemplateBuilder();
 
-		builder.sharedAttribute(
-				OAuth2ClientAttributeNames.CLIENT_REGISTRATION_REPOSITORY,
+		builder.sharedAttribute(OAuth2ClientAttributeNames.CLIENT_REGISTRATION_REPOSITORY,
 				this.clientRegistrationRepository);
-		builder.sharedAttribute(
-				OAuth2ClientAttributeNames.AUTHORIZED_CLIENT_SERVICE,
+		builder.sharedAttribute(OAuth2ClientAttributeNames.AUTHORIZED_CLIENT_SERVICE,
 				this.authorizedClientService);
-		builder.interceptors(
-				new OAuth2ClientCredentialsGrantInterceptor(),
+		builder.interceptors(new OAuth2ClientCredentialsGrantInterceptor(),
 				new OAuth2BearerTokenAuthorizationInterceptor());
 
 		return builder;
 	}
+
 }

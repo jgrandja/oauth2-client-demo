@@ -28,10 +28,12 @@ import java.io.IOException;
 /**
  * @author Joe Grandja
  */
-public class OAuth2BearerTokenAuthorizationInterceptor implements ClientHttpRequestInterceptor {
+public class OAuth2BearerTokenAuthorizationInterceptor
+		implements ClientHttpRequestInterceptor {
 
 	@Override
-	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+	public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+			ClientHttpRequestExecution execution) throws IOException {
 		DefaultClientHttpRequestAttributes clientHttpRequestAttributes = (DefaultClientHttpRequestAttributes) request;
 
 		String clientRegistrationId = (String) clientHttpRequestAttributes
@@ -42,9 +44,12 @@ public class OAuth2BearerTokenAuthorizationInterceptor implements ClientHttpRequ
 				.getAttribute(OAuth2ClientAttributeNames.AUTHORIZED_CLIENT_SERVICE);
 
 		OAuth2AuthorizedClient authorizedClient = authorizedClientService
-				.loadAuthorizedClient(clientRegistrationId, resourceOwnerPrincipal.getName());
-		request.getHeaders().add("Authorization", "Bearer " + authorizedClient.getAccessToken().getTokenValue());
+				.loadAuthorizedClient(clientRegistrationId,
+						resourceOwnerPrincipal.getName());
+		request.getHeaders().add("Authorization",
+				"Bearer " + authorizedClient.getAccessToken().getTokenValue());
 
 		return execution.execute(request, body);
 	}
+
 }

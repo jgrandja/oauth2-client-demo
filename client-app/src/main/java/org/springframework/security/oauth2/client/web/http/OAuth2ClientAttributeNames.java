@@ -20,12 +20,16 @@ package org.springframework.security.oauth2.client.web.http;
  */
 public interface OAuth2ClientAttributeNames {
 
-	String CLIENT_REGISTRATION_REPOSITORY = OAuth2ClientAttributeNames.class.getName() + ".CLIENT_REGISTRATION_REPOSITORY";
+	String CLIENT_REGISTRATION_REPOSITORY = OAuth2ClientAttributeNames.class.getName()
+			+ ".CLIENT_REGISTRATION_REPOSITORY";
 
-	String AUTHORIZED_CLIENT_SERVICE = OAuth2ClientAttributeNames.class.getName() + ".AUTHORIZED_CLIENT_SERVICE";
+	String AUTHORIZED_CLIENT_SERVICE = OAuth2ClientAttributeNames.class.getName()
+			+ ".AUTHORIZED_CLIENT_SERVICE";
 
-	String CLIENT_REGISTRATION_IDENTIFIER =  OAuth2ClientAttributeNames.class.getName() + ".CLIENT_REGISTRATION_IDENTIFIER";
+	String CLIENT_REGISTRATION_IDENTIFIER = OAuth2ClientAttributeNames.class.getName()
+			+ ".CLIENT_REGISTRATION_IDENTIFIER";
 
-	String RESOURCE_OWNER_PRINCIPAL  = OAuth2ClientAttributeNames.class.getName() + ".RESOURCE_OWNER_PRINCIPAL";
+	String RESOURCE_OWNER_PRINCIPAL = OAuth2ClientAttributeNames.class.getName()
+			+ ".RESOURCE_OWNER_PRINCIPAL";
 
 }

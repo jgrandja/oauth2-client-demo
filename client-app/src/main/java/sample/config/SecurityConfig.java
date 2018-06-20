@@ -39,4 +39,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.authorizationCodeGrant();
 	}
 	// @formatter:on
+
 }

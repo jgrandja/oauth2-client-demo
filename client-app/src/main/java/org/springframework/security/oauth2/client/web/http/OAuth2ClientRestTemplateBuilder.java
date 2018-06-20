@@ -38,34 +38,45 @@ import java.util.stream.Collectors;
  * @author Joe Grandja
  */
 public class OAuth2ClientRestTemplateBuilder {
+
 	private final ClientHttpRequestFactory defaultRequestFactory = new SimpleClientHttpRequestFactory();
+
 	private ClientHttpRequestFactory requestFactory;
+
 	private Set<HttpMessageConverter<?>> messageConverters;
+
 	private List<? extends ClientHttpRequestInterceptor> interceptors;
+
 	private ResponseErrorHandler errorHandler;
+
 	private Map<String, Object> requestAttributes = new LinkedHashMap<>();
+
 	private Map<String, Object> sharedAttributes = new LinkedHashMap<>();
 
-
-	public OAuth2ClientRestTemplateBuilder requestFactory(ClientHttpRequestFactory requestFactory) {
+	public OAuth2ClientRestTemplateBuilder requestFactory(
+			ClientHttpRequestFactory requestFactory) {
 		Assert.notNull(requestFactory, "requestFactory cannot be null");
 		this.requestFactory = requestFactory;
 		return this;
 	}
 
-	public OAuth2ClientRestTemplateBuilder messageConverters(HttpMessageConverter<?>... messageConverters) {
+	public OAuth2ClientRestTemplateBuilder messageConverters(
+			HttpMessageConverter<?>... messageConverters) {
 		Assert.notEmpty(messageConverters, "messageConverters cannot be empty");
-		this.messageConverters = Arrays.stream(messageConverters).collect(Collectors.toSet());
+		this.messageConverters = Arrays.stream(messageConverters)
+				.collect(Collectors.toSet());
 		return this;
 	}
 
-	public OAuth2ClientRestTemplateBuilder interceptors(ClientHttpRequestInterceptor... interceptors) {
+	public OAuth2ClientRestTemplateBuilder interceptors(
+			ClientHttpRequestInterceptor... interceptors) {
 		Assert.notEmpty(interceptors, "interceptors cannot be empty");
 		this.interceptors = Arrays.asList(interceptors);
 		return this;
 	}
 
-	public OAuth2ClientRestTemplateBuilder errorHandler(ResponseErrorHandler errorHandler) {
+	public OAuth2ClientRestTemplateBuilder errorHandler(
+			ResponseErrorHandler errorHandler) {
 		Assert.notNull(errorHandler, "errorHandler cannot be null");
 		this.errorHandler = errorHandler;
 		return this;
@@ -86,14 +97,14 @@ public class OAuth2ClientRestTemplateBuilder {
 	}
 
 	public RestTemplate build() {
-		ClientHttpRequestFactory requestFactory =
-				this.requestFactory != null ? this.requestFactory : this.defaultRequestFactory;
-		List<? extends ClientHttpRequestInterceptor> interceptors =
-				this.interceptors != null ? this.interceptors : Collections.emptyList();
-		InterceptingClientHttpRequestAttributesFactory requestAttributesFactory =
-				new InterceptingClientHttpRequestAttributesFactory(requestFactory, interceptors);
+		ClientHttpRequestFactory requestFactory = this.requestFactory != null
+				? this.requestFactory : this.defaultRequestFactory;
+		List<? extends ClientHttpRequestInterceptor> interceptors = this.interceptors != null
+				? this.interceptors : Collections.emptyList();
+		InterceptingClientHttpRequestAttributesFactory requestAttributesFactory = new InterceptingClientHttpRequestAttributesFactory(
+				requestFactory, interceptors);
 		requestAttributesFactory.setRequestAttributes(this.getRequestAttributes());
-		this.requestAttributes.clear();		// Reset the per-request attributes
+		this.requestAttributes.clear(); // Reset the per-request attributes
 
 		RestTemplate restTemplate = new RestTemplate() {
 			@Override
@@ -120,4 +131,5 @@ public class OAuth2ClientRestTemplateBuilder {
 		requestAttributes.putAll(this.sharedAttributes);
 		return () -> requestAttributes;
 	}
+
 }

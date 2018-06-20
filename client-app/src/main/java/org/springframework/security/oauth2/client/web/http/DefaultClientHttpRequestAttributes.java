@@ -30,14 +30,18 @@ import java.util.Map;
 /**
  * @author Joe Grandja
  */
-class DefaultClientHttpRequestAttributes implements ClientHttpRequest, ClientHttpRequestAttributes {
+class DefaultClientHttpRequestAttributes
+		implements ClientHttpRequest, ClientHttpRequestAttributes {
+
 	private final ClientHttpRequest wrappedRequest;
+
 	private final Map<String, Object> requestAttributes;
+
 	private final ClientHttpRequestExecution requestExecution;
 
 	DefaultClientHttpRequestAttributes(ClientHttpRequest request,
-										Map<String, Object> requestAttributes,
-										ClientHttpRequestExecution requestExecution) {
+			Map<String, Object> requestAttributes,
+			ClientHttpRequestExecution requestExecution) {
 		this.wrappedRequest = request;
 		this.requestAttributes = new HashMap<>(requestAttributes);
 		this.requestExecution = requestExecution;
@@ -94,4 +98,5 @@ class DefaultClientHttpRequestAttributes implements ClientHttpRequest, ClientHtt
 	ClientHttpRequest getWrappedRequest() {
 		return this.wrappedRequest;
 	}
+
 }
