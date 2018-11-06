@@ -15,7 +15,6 @@ repositories {
 
 ext {
     uaaVersion = '4.11.0'
-    tomcatHomeDir = '/Users/jgrandja/DevTools/apache-tomcat-8.0.33'
 }
 
 configurations {
@@ -47,9 +46,14 @@ cargo {
     }
 
     local {
-        homeDir = file("$tomcatHomeDir")
         outputFile = file('uaa-server.log')
 
+        installer {
+            installUrl = 'https://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.34/bin/apache-tomcat-8.5.34.zip'
+
+            downloadDir = file("$buildDir/download")
+            extractDir = file("$buildDir/extract")
+        }
         systemProperties {
             property "UAA_CONFIG_PATH", "$projectDir"
         }
