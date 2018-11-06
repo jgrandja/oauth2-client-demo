@@ -1,3 +1,5 @@
+issuer:
+  uri: http://localhost:8090/uaa
 oauth:
   user:
     authorities:
