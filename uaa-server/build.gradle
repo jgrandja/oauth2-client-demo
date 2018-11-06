@@ -36,6 +36,10 @@ task downloadUAA(type: Copy) {
     into "$buildDir"
 }
 
+cargoRunLocal.dependsOn downloadUAA
+
+task uaa(dependsOn: cargoRunLocal) {}
+
 cargo {
     containerId = 'tomcat8x'
     port = 8090
