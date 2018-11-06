@@ -33,7 +33,7 @@ dependencies {
 
 task downloadUAA(type: Copy) {
     from configurations.uaa
-    into "$projectDir"
+    into "$buildDir"
 }
 
 cargo {
@@ -41,7 +41,7 @@ cargo {
     port = 8090
 
     deployable {
-        file = file("cloudfoundry-identity-uaa-${uaaVersion}.war")
+        file = file("$buildDir/cloudfoundry-identity-uaa-${uaaVersion}.war")
         context = 'uaa'
     }
 
