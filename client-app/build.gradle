@@ -3,7 +3,7 @@ buildscript {
         maven { url 'https://repo.spring.io/libs-milestone' }
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.0.RELEASE'
     }
 }
 
@@ -17,8 +17,6 @@ apply plugin: 'io.spring.dependency-management'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-ext.springSecurityOAuth2Version = '5.1.0.BUILD-SNAPSHOT'
-
 repositories {
     maven { url "https://repo.spring.io/libs-snapshot" }
     maven { url "https://repo.spring.io/libs-milestone" }
@@ -29,13 +27,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web",
             "org.springframework.boot:spring-boot-starter-thymeleaf",
             "org.springframework.boot:spring-boot-starter-security",
-            "org.springframework.security:spring-security-config:${springSecurityOAuth2Version}",
-            "org.springframework.security:spring-security-oauth2-core:${springSecurityOAuth2Version}",
-            "org.springframework.security:spring-security-oauth2-client:${springSecurityOAuth2Version}",
-            "org.springframework.security:spring-security-oauth2-jose:${springSecurityOAuth2Version}",
-            "org.thymeleaf.extras:thymeleaf-extras-springsecurity4",
+            "org.springframework.boot:spring-boot-starter-oauth2-client",
+            "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.4.RELEASE",
             "org.springframework:spring-webflux",
-            "io.projectreactor.ipc:reactor-netty"
+            "io.projectreactor.netty:reactor-netty"
 
     testCompile "org.springframework.boot:spring-boot-starter-test",
                 "org.springframework.security:spring-security-test",

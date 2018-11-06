@@ -34,9 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.oauth2Login()
 				.and()
-			.oauth2()
-				.client()
-					.authorizationCodeGrant();
+			.oauth2Client();
 	}
 	// @formatter:on
 }
