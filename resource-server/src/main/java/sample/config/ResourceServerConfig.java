@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2018 the original author or authors.
+ * Copyright 2002-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,37 +15,28 @@
  */
 package sample.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
  * @author Joe Grandja
  */
 @Configuration
-@EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-	private static final String RESOURCE_ID = "message";
 
-	@Autowired
-	private TokenStore tokenStore;
+public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
+	// @formatter:off
 	@Override
-	public void configure(ResourceServerSecurityConfigurer security) throws Exception {
-		security.resourceId(RESOURCE_ID).tokenStore(tokenStore);
-	}
-
-	@Override
-	public void configure(HttpSecurity http) throws Exception {
-		// @formatter:off
+	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.mvcMatcher("/messages/**")
 			.authorizeRequests()
-				.mvcMatchers("/messages/**").access("#oauth2.hasScope('message.read') or hasRole('CLIENT') or hasRole('MESSAGING_CLIENT')");
-		// @formatter:on
+				.mvcMatchers("/messages/**").access("hasAuthority('SCOPE_message.read')")
+				.anyRequest().authenticated()
+				.and()
+			.oauth2ResourceServer()
+				.jwt();
 	}
+	// @formatter:on
+
 }
