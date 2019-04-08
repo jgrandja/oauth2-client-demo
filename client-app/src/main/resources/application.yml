@@ -32,13 +32,12 @@ spring:
             redirect-uri-template: "{baseUrl}/messages"
             scope: message.read
             client-name: Messaging Client
-          general-messaging:  # NOTE: This client is used for the client_credentials grant flow
+          general-messaging:
             provider: uaa
             client-id: general-messaging
             client-secret: secret
             client-authentication-method: basic
-            authorization-grant-type: authorization_code
-            redirect-uri-template: "{baseUrl}/messages"
+            authorization-grant-type: client_credentials
             scope: message.read
             client-name: General Messaging Client
         provider:
